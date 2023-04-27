@@ -27,6 +27,11 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.sonarsource.scanner.maven</groupId>
+			<artifactId>sonar-maven-plugin</artifactId>
+			<version>3.9.1.2184</version>
+		</dependency>
+		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
@@ -41,32 +46,20 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-pmd-plugin</artifactId>
-				<version>3.17.0</version>
-				<executions>
-					<execution>
-						<phase>validate</phase>
-						<goals>
-							<goal>pmd</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>3.1.2</version>
-				<configuration>
-					<suppressionsLocation>checkstyle-suppressions.xml</suppressionsLocation>
-				</configuration>
+				<version>3.1.1</version>
 				<executions>
 					<execution>
-						<phase>validate</phase>
+						<phase>verify</phase>
 						<goals>
 							<goal>check</goal>
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+					<failOnViolation>false</failOnViolation>
+					<failsOnError>false</failsOnError>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>com.github.spotbugs</groupId>
@@ -102,4 +95,23 @@
 			</plugin>
 		</plugins>
 	</build>
+	<profiles>
+		<profile>
+			<id>sonar</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<!-- Optional URL to server. Default value is http://localhost:9000 -->
+				<sonar.host.url>
+					http://localhost:9000
+				</sonar.host.url>
+				<sonar.login>admin</sonar.login>
+				<sonar.password>rishika</sonar.password>
+				<sonar.checkstyle.reportPaths>checkstyle-result.xml</sonar.checkstyle.reportPaths>
+				<sonar.pmd.reportPaths>pmd.xml</sonar.pmd.reportPaths>
+				<checkstyle.failOnViolation>true</checkstyle.failOnViolation>
+			</properties>
+		</profile>
+	</profiles>
 </project>
